@@ -7,11 +7,12 @@ import com.fasterxml.jackson.core.JsonToken;
 import java.io.IOException;
 import java.net.URL;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Callable;
 
 /**
  * Thread has resp for pars url link below to general json data.
  */
-public class JsonParsThread implements Runnable {
+public class JsonParsThread implements Callable<String> {
     private BlockingQueue<ParsInfo> queue;
 
     /**
@@ -22,8 +23,9 @@ public class JsonParsThread implements Runnable {
     }
 
     @Override
-    public void run() {
+    public String call() {
         parse();
+        return Thread.currentThread().getName();
     }
 
     public boolean isAlive(){

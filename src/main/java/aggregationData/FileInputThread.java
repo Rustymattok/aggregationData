@@ -3,12 +3,13 @@ package aggregationData;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 /**
  * Thread has resp for save pars data to file.
  */
-public class FileInputThread implements Runnable {
+public class FileInputThread implements Callable<String> {
     private BlockingQueue<String> queueSave;
 
     /**
@@ -29,7 +30,7 @@ public class FileInputThread implements Runnable {
     }
 
     @Override
-    public void run() {
+    public String call() {
         while (!Thread.currentThread().isInterrupted()) {
             FileWriter fileWriter = null;
             String json = null;
@@ -38,7 +39,7 @@ public class FileInputThread implements Runnable {
                 json = queueSave.take();
                 if (json.equals("stop")) {
                     cancle();
-                    return;
+                    break;
                 }
                 StringBuilder stringBuilderJson = new StringBuilder(json).append("\n");
                 fileWriter.write(String.valueOf(stringBuilderJson));
@@ -47,5 +48,6 @@ public class FileInputThread implements Runnable {
                 e.printStackTrace();
             }
         }
+        return Thread.currentThread().getName();
     }
 }

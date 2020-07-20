@@ -4,11 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.net.URL;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Callable;
 
 /**
  * Thread has resp for pars each elements by url link below to general json data.
  */
-public class JsonAggregationThread implements Runnable {
+public class JsonAggregationThread implements Callable<String> {
     private BlockingQueue<ParsInfo> queue;
     private BlockingQueue<String> queueSave;
     private JsonParsThread thread;
@@ -25,8 +26,9 @@ public class JsonAggregationThread implements Runnable {
     }
 
     @Override
-    public void run() {
+    public String call() {
         initAggreation();
+        return Thread.currentThread().getName();
     }
 
     public void cancle(){
